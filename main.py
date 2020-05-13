@@ -1,7 +1,7 @@
 import os
 import time
 from pynput import keyboard
-
+import random
 
 class Game:
 
@@ -23,7 +23,6 @@ class Game:
     def startListner(self):
         self.listener = keyboard.Listener(self.onPress)
         self.listener.start() 
-        #self.listener.join()
 
     def __init__(self, width, height):
         self.field_width = width
@@ -32,9 +31,16 @@ class Game:
         self.head_x = int(self.field_width / 2)
         self.head_y = int(self.field_height / 2)
 
+        self.fruit_x = 1
+        self.fruit_y = 1
+
+        self.score = 0
+
         self.direction = 'NONE'
 
         self.isNotDed = True
+
+        self.fruitIsOnHead = False
         
         self.startListner()
         
@@ -49,10 +55,20 @@ class Game:
                     print("#", end = "")
                 elif y == self.head_y and x == self.head_x:
                     print("O", end = "")
+                elif y == self.fruit_y and x == self.fruit_x:
+                    print("@", end = "")
                 else:
                     print(" ", end = "")
             print()
+        print("SCORE:", self.score)
 
+    def randomFruit(self):
+        self.fruit_x = random.randint(1, self.field_width - 2)
+        self.fruit_y = random.randint(1, self.field_height - 2)
+
+    def isFruitOnHead(self):
+        return self.fruit_x == self.head_x and self.fruit_y == self.head_y
+           
     def isHeadInWall(self):
         return self.head_x == 0 or self.head_x == self.field_width - 1 or self.head_y == 0 or self.head_y == self.field_height - 1
     
@@ -69,16 +85,23 @@ class Game:
         if self.isHeadInWall():
             self.isNotDed = False
 
+        if self.isFruitOnHead():
+            self.fruitIsOnHead = True
+
     
     def playGame(self):
         while self.isNotDed:
+            if self.fruitIsOnHead:
+                self.randomFruit()
+                self.score += 10
+                self.fruitIsOnHead = False
             self.drawField()
             time.sleep(0.2)
             self.update()
         print("GAME OVER")
 
 def main():
-    game = Game(51, 23)
+    game = Game(51, 21)
     game.playGame()
 
 if __name__ == "__main__":
