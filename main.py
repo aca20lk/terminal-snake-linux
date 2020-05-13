@@ -31,8 +31,8 @@ class Game:
         self.head_x = int(self.field_width / 2)
         self.head_y = int(self.field_height / 2)
 
-        self.fruit_x = 1
-        self.fruit_y = 1
+        self.fruit_x = random.randint(1, self.field_width - 2)
+        self.fruit_y = random.randint(1, self.field_height - 2)
 
         self.score = 0
 
