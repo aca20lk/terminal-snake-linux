@@ -72,6 +72,9 @@ class Game:
     def isHeadInWall(self):
         return  self.snake.getHeadPos()[0] == 0 or self.snake.getHeadPos()[0]  == self.field_width - 1 or self.snake.getHeadPos()[1] == 0 or self.snake.getHeadPos()[1] == self.field_height - 1
 
+    def isHeadOnTail(self):
+        return self.snake.isPartOfTail( self.snake.getHeadPos()[0], self.snake.getHeadPos()[1])
+    
     def update(self):
         self.snake.move()
 
@@ -80,15 +83,16 @@ class Game:
             self.score += 10
             self.randomFruit()
         
-        if self.isHeadInWall(): #TODO check if head in tail 
+        if self.isHeadInWall() or self.isHeadOnTail(): 
             self.isGameOver = True
-
 
     def playGame(self):
         while not self.isGameOver:
             self.drawField()
-            time.sleep(0.3)
+            time.sleep(0.1)
             self.update()
+        if self.isHeadOnTail():
+            self.drawField()
         print("GAME OVER")
 
 class SnakeElement:
