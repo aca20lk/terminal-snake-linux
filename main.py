@@ -28,13 +28,13 @@ class Game:
         except:
             k=key.name
         if k in ['w', 'a', 's', 'd']:
-            if k == 'w':
+            if k == 'w' and self.snake.direction != 'DOWN':
                 self.snake.direction = 'UP'
-            if k == 'a':
+            if k == 'a' and self.snake.direction != 'RIGHT':
                 self.snake.direction = 'LEFT'
-            if k == 's':
+            if k == 's' and self.snake.direction != 'UP':
                 self.snake.direction = 'DOWN'
-            if k == 'd':
+            if k == 'd' and self.snake.direction != 'LEFT':
                 self.snake.direction = 'RIGHT'
 
     def startListner(self):
@@ -87,7 +87,7 @@ class Game:
     def playGame(self):
         while not self.isGameOver:
             self.drawField()
-            time.sleep(0.1)
+            time.sleep(0.3)
             self.update()
         print("GAME OVER")
 
