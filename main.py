@@ -87,7 +87,7 @@ class Game:
     def playGame(self):
         while not self.isGameOver:
             self.drawField()
-            time.sleep(0.7)
+            time.sleep(0.1)
             self.update()
         print("GAME OVER")
 
@@ -131,6 +131,10 @@ class Snake:
 
             for snake_element in self.snake_elements_list:
                 if snake_element.number == len(self.snake_elements_list):
+                    self.previous_tail_end = [ snake_element.element_x, snake_element.element_y ] 
+
+            for snake_element in self.snake_elements_list:
+                if snake_element.number == len(self.snake_elements_list):
                     if self.direction == 'UP':
                         snake_element.element_x = self.getHeadPos()[0]
                         snake_element.element_y = self.getHeadPos()[1] - 1
@@ -154,7 +158,7 @@ class Snake:
 
 
     def addTail(self):
-        if len( self.snake_elements_list ) == 1: # THIS IS HOW TO MOVE IF ONLY HEAD 
+        if len( self.snake_elements_list ) == 1: # THIS IS HOW TO ADD TAIL IF ONLY HEAD 
             if self.direction == 'UP':
                 self.snake_elements_list.append(SnakeElement(self.snake_elements_list[0].element_x, self.snake_elements_list[0].element_y + 1, False, 2))
             if self.direction == 'DOWN':
@@ -163,6 +167,8 @@ class Snake:
                 self.snake_elements_list.append(SnakeElement(self.snake_elements_list[0].element_x + 1, self.snake_elements_list[0].element_y, False, 2))
             if self.direction == 'RIGHT':
                 self.snake_elements_list.append(SnakeElement(self.snake_elements_list[0].element_x - 1, self.snake_elements_list[0].element_y, False, 2))
+        else:
+            self.snake_elements_list.append( SnakeElement( self.previous_tail_end[0], self.previous_tail_end[1], False, len(self.snake_elements_list)+1))
 
     def isPartOfTail(self, x, y):
         for snake_element in self.snake_elements_list:
